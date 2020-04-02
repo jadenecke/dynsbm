@@ -149,6 +149,7 @@ List dynsbmcore(int T, int N, int Q,
       int p=0;
       for(int j=0; j<N; j++){
 	for(int i=0; i<N; i++){
+		Rprintf("|---> Vector Transformation (Yasvector): Step: %i / %i  \n", i, N);
 	  for(int t=0; t<T; t++){
 	    Y[t][i][j] = double(Yasvector[p]);
 	    p++;
@@ -161,6 +162,7 @@ List dynsbmcore(int T, int N, int Q,
       for(int q=0;q<Q;q++) for(int l=0;l<Q;l++) trans[l+q*Q] = em.getModel().getTrans(q,l);
       IntegerMatrix membership(N,T);
       for(int t=0;t<T;t++){
+		  Rprintf("|---> Something Something: Step: %i / %i  \n", t, T);
 	std::vector<int> groups = em.getModel().getGroupsByMAP(t);
 	for(int i=0;i<N;i++) membership[i+t*N] = groups[i]+1;
       }
@@ -177,7 +179,7 @@ List dynsbmcore(int T, int N, int Q,
       Rcpp::NumericVector mu(d);  // create vec. with correct dims
       for(int t=0;t<T;t++){
         for(int q=0;q<Q;q++){
-			Rprintf("|---> Forward Propagation: Time: %i / %i //// User: %i / %i \n", t, T, q ,Q);
+			Rprintf("|---> Backward Propagation: Time: %i / %i //// User: %i / %i \n", t, T, q ,Q);
           for(int l=0;l<Q;l++){
             mu[l*(Q*T)+q*T+t]= em.getModel().getMu(t,q,l);
 	  }}}
