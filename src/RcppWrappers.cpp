@@ -148,8 +148,8 @@ List dynsbmcore(int T, int N, int Q,
       allocate3D<double>(Y,T,N,N);
       int p=0;
       for(int j=0; j<N; j++){
+		  		Rprintf("|---> Vector Transformation (Yasvector): Step: %i / %i  \n", j, N);
 	for(int i=0; i<N; i++){
-		Rprintf("|---> Vector Transformation (Yasvector): Step: %i / %i  \n", i, N);
 	  for(int t=0; t<T; t++){
 	    Y[t][i][j] = double(Yasvector[p]);
 	    p++;
