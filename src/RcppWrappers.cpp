@@ -170,12 +170,14 @@ List dynsbmcore(int T, int N, int Q,
       Rcpp::NumericVector beta(d);  // create vec. with correct dims
       for(int t=0;t<T;t++){
         for(int q=0;q<Q;q++){
+			Rprintf("|---> Forward Propagation: Time: %i / %i //// User: %i / %i \n", t, T, q ,Q)
           for(int l=0;l<Q;l++){
             beta[l*(Q*T)+q*T+t]= 1-(em.getModel().getBeta(t,q,l)); // cf. paper
 	  }}}
       Rcpp::NumericVector mu(d);  // create vec. with correct dims
       for(int t=0;t<T;t++){
         for(int q=0;q<Q;q++){
+			Rprintf("|---> Forward Propagation: Time: %i / %i //// User: %i / %i \n", t, T, q ,Q)
           for(int l=0;l<Q;l++){
             mu[l*(Q*T)+q*T+t]= em.getModel().getMu(t,q,l);
 	  }}}

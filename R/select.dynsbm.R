@@ -38,8 +38,10 @@ select.dynsbm <- function(Y, present=NULL, Qmin, Qmax,
     }
     list.dynsbm <- list()
     for (Q in Qmin:Qmax){
+      cat(paste0("-> Estimating with Q number of Groups: ", Q, " // Time: ", Sys.time()))
         results <- list()
         for (rep in 1:nstart){
+          cat(paste0("|-",Q,">Estimating for starting Point: ", rep, " // Time: ", Sys.time()))
             if (rep==1) this.perturbation.rate <- 0.0 else this.perturbation.rate <- perturbation.rate
             results[[length(results)+1]] <- estimate.dynsbm(Y=Y, present=present, Q=Q, directed=directed,
                                                             self.loop=self.loop,
