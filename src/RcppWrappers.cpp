@@ -143,12 +143,14 @@ List dynsbmcore(int T, int N, int Q,
       ////////////////////////
       ////////////////////////
       // (edgetype=="continuous"){
+		  Rprintf("|--->  Estimating Model:\n");
       EM<DynSBMGaussian,double> em(T,N,Q,present,isdirected,withselfloop);
       double*** Y;
+	  Rprintf("|---> Allocating 3D double \n");
       allocate3D<double>(Y,T,N,N);
       int p=0;
-      for(int j=0; j<N; j++){
-		  		Rprintf("|---> Vector Transformation (Yasvector): Step: %i / %i  \n", j, N);
+	  Rprintf("|---> Vector Transformation (Yasvector) \n");
+      for(int j=0; j<N; j++){	  		
 	for(int i=0; i<N; i++){
 	  for(int t=0; t<T; t++){
 	    Y[t][i][j] = double(Yasvector[p]);
@@ -156,37 +158,44 @@ List dynsbmcore(int T, int N, int Q,
 	  }
 	}
       }
+	  Rprintf("|---> Initialize Model \n");
       em.initialize(as<vector<int> >(clustering),Y,frozen);
       int nbiteff = em.run(Y,nbit,10,frozen);
+	  Rprintf("|---> Matrix Transform \n");
       NumericMatrix trans(Q,Q);
       for(int q=0;q<Q;q++) for(int l=0;l<Q;l++) trans[l+q*Q] = em.getModel().getTrans(q,l);
+	  Rprintf("|--->  Matrix Membership\n");
       IntegerMatrix membership(N,T);
-      for(int t=0;t<T;t++){
-		  Rprintf("|---> Something Something: Step: %i / %i  \n", t, T);
+      Rprintf("|---> Get Groups \n");
+	  for(int t=0;t<T;t++){
 	std::vector<int> groups = em.getModel().getGroupsByMAP(t);
 	for(int i=0;i<N;i++) membership[i+t*N] = groups[i]+1;
       }
+	  Rprintf("|---> Initialize Betas \n");
       Rcpp::NumericVector betadims(3);
       betadims[0] = T; betadims[1] = Q; betadims[2] = Q;
       Rcpp::Dimension d(betadims); // get the dim object
       Rcpp::NumericVector beta(d);  // create vec. with correct dims
       for(int t=0;t<T;t++){
+		  Rprintf("|---> Forward Propagation: Time: %i / %i  \n", t, T);
         for(int q=0;q<Q;q++){
-			Rprintf("|---> Forward Propagation: Time: %i / %i //// User: %i / %i \n", t, T, q ,Q);
           for(int l=0;l<Q;l++){
             beta[l*(Q*T)+q*T+t]= 1-(em.getModel().getBeta(t,q,l)); // cf. paper
 	  }}}
       Rcpp::NumericVector mu(d);  // create vec. with correct dims
       for(int t=0;t<T;t++){
+		Rprintf("|---> Backward Propagation: Time: %i / %i  \n", t, T);
         for(int q=0;q<Q;q++){
-			Rprintf("|---> Backward Propagation: Time: %i / %i //// User: %i / %i \n", t, T, q ,Q);
           for(int l=0;l<Q;l++){
             mu[l*(Q*T)+q*T+t]= em.getModel().getMu(t,q,l);
 	  }}}
       NumericVector sigma(T);
+	  Rprintf("|---> Select logLikelyhood \n");
       for(int t=0;t<T;t++) sigma[t] = em.getModel().getSigma(t);
       double lkl = em.getModel().modelselectionLoglikelihood(Y);
+	  Rprintf("|---> Deallocate 3D double \n");
       deallocate3D<double>(Y,T,N,Q);
+	  Rprintf("|---> Returning Results\n");
       return List::create(Rcpp::Named("trans") = trans,
 			  Rcpp::Named("membership") = membership,
 			  Rcpp::Named("beta") = beta,
