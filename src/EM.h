@@ -47,7 +47,7 @@ namespace dynsbm{
 	int itfp = 0;
 	double prevloglfp = prevlogl;
 	while (itfp<nbitFP){
-		Rprintf("|-----> Model Iter Step: %i / %i // \n", itfp, nbitFP);
+		Rprintf("|-----> Inner Iter: %i / %i //// Outer Itter: %i / %i \n", itfp, nbitFP, it, nbit);
 	  _model.updateTau(Y);
 	  if (itfp%3==0){ // saving time
 	    double newloglfp = _model.completedLoglikelihood(Y);
