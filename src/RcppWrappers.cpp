@@ -160,7 +160,7 @@ List dynsbmcore(int T, int N, int Q,
       }
 	  Rprintf("|---> Initialize Model \n");
       em.initialize(as<vector<int> >(clustering),Y,frozen);
-      int nbiteff = em.run(Y,nbit,10,frozen);
+      int nbiteff = em.run(Y,nbit,30,frozen);
 	  Rprintf("|---> Matrix Transform \n");
       NumericMatrix trans(Q,Q);
       for(int q=0;q<Q;q++) for(int l=0;l<Q;l++) trans[l+q*Q] = em.getModel().getTrans(q,l);
