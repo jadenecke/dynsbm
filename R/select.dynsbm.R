@@ -48,7 +48,7 @@ select.dynsbm <- function(Y, present=NULL, Qmin, Qmax,
                                                             edge.type=edge.type, K=K,
                                                             nb.cores=nb.cores, init.cluster=NULL,
                                                             perturbation.rate=this.perturbation.rate,
-                                                            iter.max=iter.max, fixed.param=fixed.param,
+                                                            iter.max=10, fixed.param=fixed.param,
                                                             bipartition=bipartition)
         }
         best.result <- which.max(sapply(results, FUN=function(result) result$dynsbm$loglikelihood))
