@@ -1,4 +1,4 @@
-useDynLib(dynsbm, .registration = TRUE)
+useDynLib(dynsbm10iter, .registration = TRUE)
 import(Rcpp)
 import(riverplot)
 import(RColorBrewer)
