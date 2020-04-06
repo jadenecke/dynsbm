@@ -1,4 +1,4 @@
-Package: dynsbm
+Package: dynsbm10iter
 Type: Package
 Title: Dynamic Stochastic Block Models
 Version: 0.7
